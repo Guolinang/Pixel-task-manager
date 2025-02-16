@@ -2,7 +2,6 @@ package auf
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 	"time"
 
@@ -18,7 +17,7 @@ func CreateJWT(secret []byte, userid int) (string, error) {
 	})
 	tokenStr, err := token.SignedString(secret)
 	if err != nil {
-		return "", fmt.Errorf("error generation token")
+		return "", fmt.Errorf("error generating token")
 	}
 
 	return tokenStr, nil
@@ -29,16 +28,22 @@ func ParseJWT(secret []byte, token string) (int, error) {
 		return secret, nil
 	})
 	if err != nil {
-		log.Fatal("err parsing token: ", err)
+		return 0, fmt.Errorf("authentication failed: %v", err)
 
 	}
 
 	if claims, ok := t.Claims.(jwt.MapClaims); ok {
 
-		if str, ok := (claims["id"]).(string); ok {
+		if expiredAt, ok := (claims["expiredAt"]).(float64); ok {
+			tm := time.Unix(int64(expiredAt), 0)
+			if time.Now().After(tm) {
+				return 0, fmt.Errorf("token expired")
+			}
+		}
+		if str, ok := (claims["userid"]).(string); ok {
 			n, err := strconv.ParseInt(str, 10, 64)
 			if err != nil {
-				log.Fatal(err)
+				return 0, fmt.Errorf("authentication failed: %v", err)
 			}
 			return int(n), nil
 		}

@@ -2,7 +2,6 @@ package users
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"server/auf"
 	"server/config"
@@ -39,8 +38,6 @@ func (j *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
 		utils.WriteError(w, http.StatusBadRequest, err)
 		return
 	}
-
-	log.Print("register ", payload)
 
 	if err := utils.Validate.Struct(payload); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload %v", err.(validator.ValidationErrors)))

@@ -1,6 +1,9 @@
 package types
 
-import "time"
+import (
+	"server/utils"
+	"time"
+)
 
 type User struct {
 	ID       int    `json:"id"`
@@ -20,45 +23,53 @@ type RegisterUserPayload struct {
 
 type UserStore interface {
 	GetUserBylogin(string) (*User, error)
-	// 	GetUserById(int) (*User, error)
 	CreateUser(User) error
 }
 
 type Task struct {
 	UserID       int       `json:"userID"`
-	TaskID       int       `json:"taskID"`
-	IsImportant  bool      `json:"isImportant"`
-	TaskName     string    `json:"taskName"`
+	TaskID       int       `json:"id"`
+	IsImportant  bool      `json:"important"`
+	TaskName     string    `json:"name"`
 	Difficulty   int       `json:"difficulty"`
-	SDescription string    `json:"sDescription"`
+	SDescription string    `json:"s_desc"`
 	Type         string    `json:"type"`
-	Stats        string    `json:"stats"`
-	Deadline     time.Time `json:"deadline"`
+	Stats        string    `json:"stat"`
+	Deadline     time.Time `json:"urgency"`
 	Repeat       string    `json:"repeat"`
 	Subtask      string    `json:"subtask"`
-	FDescription string    `json:"fDescription"`
+	FDescription string    `json:"l_desc"`
 	Done         bool      `json:"done"`
+}
+
+type GetTasksResponse struct {
+	Unfinished []Task `json:"unfinished"`
+	Important  []Task `json:"important"`
+	Today      []Task `json:"today"`
 }
 
 type TaskStore interface {
 	GetUserTasks(int) ([]Task, error)
 	CreateTask(*Task) error
+	GetSortedTasks(int, utils.JsonDate) (*GetTasksResponse, error)
+	DeleteTask(*Task) error
+	UpdateTask(*Task) error
 }
 
-type GetTasksPayload struct {
-	UserID       int       `json:"userID" validate:"required"`
-	TaskID       int       `json:"taskID" validate:"required"`
-	IsImportant  bool      `json:"isImportant" validate:"required"`
-	TaskName     string    `json:"taskName" validate:"required"`
-	Difficulty   int       `json:"difficulty" validate:"required"`
-	SDescription string    `json:"sDescription" validate:"required"`
-	Type         string    `json:"type" validate:"required"`
-	Stats        string    `json:"stats" validate:"required"`
-	Deadline     time.Time `json:"deadline" validate:"required"`
-	Repeat       string    `json:"repeat" validate:"required"`
-	Subtask      string    `json:"subtask" validate:"required"`
-	FDescription string    `json:"fDescription" validate:"required"`
-	Done         bool      `json:"done" validate:"required"`
+type ManageTaskPayload struct {
+	TaskID       int       `json:"id"`
+	UserID       int       `json:"userID"`
+	IsImportant  bool      `json:"important"`
+	TaskName     string    `json:"name"`
+	Difficulty   int       `json:"difficulty"`
+	SDescription string    `json:"s_desc"`
+	Type         string    `json:"type"`
+	Stats        string    `json:"stat"`
+	Deadline     time.Time `json:"urgency"`
+	Repeat       string    `json:"repeat"`
+	Subtask      string    `json:"subtask"`
+	FDescription string    `json:"l_desc"`
+	Done         bool      `json:"done"`
 }
 
 type UserClaims struct {
