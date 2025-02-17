@@ -22,8 +22,10 @@ type RegisterUserPayload struct {
 }
 
 type UserStore interface {
+	GetUserById(int) (*User, error)
 	GetUserBylogin(string) (*User, error)
 	CreateUser(User) error
+	UpdateUser(User) error
 }
 
 type Task struct {
@@ -74,4 +76,47 @@ type ManageTaskPayload struct {
 
 type UserClaims struct {
 	UserId int `json:"userid"`
+}
+
+type ManageCharacterPayload struct {
+	UserID int `json:"userID"`
+	Level  int `json:"level"`
+	Exp    int `json:"exp"`
+	MaxExp int `json:"maxexp"`
+	Hp     int `json:"hp"`
+	MaxHp  int `json:"maxhp"`
+	Str    int `json:"str"`
+	Int    int `json:"int"`
+	Char   int `json:"char"`
+	Wis    int `json:"wis"`
+	Cnst   int `json:"cnst"`
+	Head   int `json:"head"`
+	Face   int `json:"face"`
+	Body   int `json:"body"`
+	Dress  int `json:"dress"`
+	Other  int `json:"other"`
+}
+type Character struct {
+	UserID int `json:"userID"`
+	Level  int `json:"level"`
+	Exp    int `json:"exp"`
+	MaxExp int `json:"maxexp"`
+	Hp     int `json:"hp"`
+	MaxHp  int `json:"maxhp"`
+	Str    int `json:"str"`
+	Int    int `json:"int"`
+	Char   int `json:"char"`
+	Wis    int `json:"wis"`
+	Cnst   int `json:"cnst"`
+	Head   int `json:"head"`
+	Face   int `json:"face"`
+	Body   int `json:"body"`
+	Dress  int `json:"dress"`
+	Other  int `json:"other"`
+}
+
+type CharacterStore interface {
+	GetCharacter(int) (*Character, error)
+	UpdateCharacter(*Character) error
+	CreateCharacter(*Character) error
 }

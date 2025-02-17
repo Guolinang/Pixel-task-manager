@@ -68,3 +68,13 @@ func (s *Store) CreateUser(u types.User) error {
 	}
 	return nil
 }
+
+func (s *Store) UpdateUser(u types.User) error {
+
+	_, err := s.db.Exec("update users set (login,password) = ($1,$2) where id=$3", u.Login, u.Password, u.ID)
+	if err != nil {
+		return err
+	}
+	return nil
+
+}

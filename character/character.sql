@@ -10,6 +10,11 @@ CREATE TABLE if not exists character (
     charC integer,
     wisC integer,
     cnstC integer,
+    head integer,
+    face integer,
+    dress integer,
+    body integer,
+    other integer,
     foreign key (userid) references users (id)
 )
 
