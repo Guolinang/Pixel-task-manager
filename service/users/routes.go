@@ -2,6 +2,7 @@ package users
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"server/auf"
 	"server/config"
@@ -33,7 +34,7 @@ func (j *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
 	case "PUT":
 		j.handleUpdateAccount(w, r)
 	default:
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("method is not supported"))
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("method is not supportedaaaa"))
 	}
 
 }
@@ -193,7 +194,7 @@ func (j *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
 		utils.WriteError(w, http.StatusInternalServerError, err)
 		return
 	}
-
+	log.Print(token)
 	utils.WriteJSON(w, http.StatusOK, map[string]string{"token": token})
 
 }

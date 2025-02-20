@@ -62,7 +62,6 @@ func (h *Handler) handleUpdateTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Print(payload)
 	if err := utils.Validate.Struct(payload); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload %v", err.(validator.ValidationErrors)))
 		return

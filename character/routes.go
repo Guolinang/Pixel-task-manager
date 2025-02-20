@@ -2,6 +2,7 @@ package character
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"server/auf"
 	"server/config"
@@ -21,9 +22,40 @@ func (h *Handeler) RegisterRoute() {
 	http.HandleFunc("/character", h.handleProfile)
 }
 
+func EnableCORS(next http.HandlerFunc) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+
+		w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type")
+
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
 func (h *Handeler) handleProfile(w http.ResponseWriter, r *http.Request) {
 
+	log.Print(r.Header)
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type")
+
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+
+	if r.Method == "OPTIONS" {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
 	token := r.Header.Get("Authorization")
+
 	if token == "" {
 		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("token not found"))
 		return
