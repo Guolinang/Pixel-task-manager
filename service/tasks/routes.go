@@ -27,6 +27,16 @@ func (h *Handler) RegisterRoute() {
 
 func (h *Handler) handleTasks(w http.ResponseWriter, r *http.Request) {
 
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type")
+
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+
+	if r.Method == "OPTIONS" {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
 	token := r.Header.Get("Authorization")
 	if token == "" {
 		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("token not found"))

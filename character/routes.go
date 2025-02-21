@@ -2,7 +2,6 @@ package character
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"server/auf"
 	"server/config"
@@ -41,8 +40,6 @@ func EnableCORS(next http.HandlerFunc) http.Handler {
 }
 
 func (h *Handeler) handleProfile(w http.ResponseWriter, r *http.Request) {
-
-	log.Print(r.Header)
 
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
